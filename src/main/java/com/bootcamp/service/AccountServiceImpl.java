@@ -1,18 +1,16 @@
 package com.bootcamp.service;
 
 import com.bootcamp.dto.AccountDto;
+import com.bootcamp.dto.Transaction;
 import com.bootcamp.entity.Account;
 import com.bootcamp.repository.AccountRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import reactor.core.CoreSubscriber;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
+
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -44,6 +42,9 @@ public class AccountServiceImpl implements AccountService {
                     account.setIdClient(accountDto.getIdClient());
                     account.setTypeAccount(accountDto.getTypeAccount());
                     account.setNumberAccount(accountDto.getNumberAccount());
+                    account.setBalance(accountDto.getBalance());
+                    account.setLimit(accountDto.getLimit());
+                    account.setDebt(accountDto.getDebt());
                     return accountRepository.save(account);
                 } else if (accountFlux1.getTypeAccount().equals(accountDto.getTypeAccount())) {
                     return Mono.error(new Exception("CLIENTE YA TIENE UNA CUENTA: " + accountDto.getTypeAccount()));
@@ -55,6 +56,9 @@ public class AccountServiceImpl implements AccountService {
                     account.setIdClient(accountDto.getIdClient());
                     account.setTypeAccount(accountDto.getTypeAccount());
                     account.setNumberAccount(accountDto.getNumberAccount());
+                    account.setBalance(accountDto.getBalance());
+                    account.setLimit(accountDto.getLimit());
+                    account.setDebt(accountDto.getDebt());
                     return accountRepository.save(account);
                 } else {
                     return Mono.error(new Exception("CLIENTE EMPRESARIAL NO PUEDE TENER CUENTAS DE: " + accountDto.getTypeAccount()));
@@ -67,6 +71,58 @@ public class AccountServiceImpl implements AccountService {
     }
 
 
+	@Override
+	public Mono<Account> saveTransaction(Transaction transaction) {
+		
+		Mono<Account> account = getAccount(transaction.getAccountDto());
+		
+		Account accot = account.block();
+		if(accot.getTypeAccount().equals("Credito")) {
+			
+			 Double debt =accot.getDebt()+transaction.getAmount();
+			if (debt>accot.getLimit()) {
+				return account;
+			}else {
+				accot.setDebt(debt);
+				return accountRepository.save(accot);
+			}
+		}else {
+		 if(transaction.getOperation()==1) {
+			 Double total= accot.getBalance()+transaction.getAmount();
+			 accot.setBalance(total);
+			 return accountRepository.save(accot);
+
+		 }else {
+			 Double total= accot.getBalance()-transaction.getAmount();
+			 if (total<0) {
+				 return account;
+			 }else {
+				 accot.setBalance(total);
+				return  accountRepository.save(accot);
+			 }
+		 }
+		 
+		}
+	
+	}
+
+
+	@Override
+	public Mono<Account> updateAccount(Account account) {
+        return accountRepository.save(account);
+	}
+
+
+	@Override
+	public Mono<Account> getAccount(AccountDto accountDto) {
+		return getAllByIdClient(accountDto.getIdClient()).filter(x -> x.getNumberAccount().equals(accountDto.getNumberAccount())).next();
+	}
+
+
+	@Override
+	public Mono<Account> getBalanceByAccount(ObjectId idCli, String numberAccount) {
+		return getAllByIdClient(idCli).filter(x -> x.getNumberAccount().equals(numberAccount)).next();
+	}
 
 
 }

@@ -1,6 +1,7 @@
 package com.bootcamp.service;
 
 import com.bootcamp.dto.AccountDto;
+import com.bootcamp.dto.Transaction;
 import com.bootcamp.entity.Account;
 import org.bson.types.ObjectId;
 import reactor.core.publisher.Flux;
@@ -11,5 +12,13 @@ public interface AccountService {
     Mono<Account> save (AccountDto accountDto);
 
     Flux<Account> getAllByIdClient (ObjectId id);
+    
+    Mono<Account> saveTransaction(Transaction transaction);
+    
+    Mono<Account> updateAccount(Account accountDto);
+    
+    Mono<Account> getAccount(AccountDto accountDto);
+    
+    Mono<Account> getBalanceByAccount(ObjectId idCli,String numberAccount);
 
 }
