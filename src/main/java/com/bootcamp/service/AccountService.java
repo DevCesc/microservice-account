@@ -1,6 +1,7 @@
 package com.bootcamp.service;
 
 import com.bootcamp.dto.AccountDto;
+import com.bootcamp.dto.Credit;
 import com.bootcamp.dto.Transaction;
 import com.bootcamp.entity.Account;
 import org.bson.types.ObjectId;
@@ -20,5 +21,7 @@ public interface AccountService {
     Mono<Account> getAccount(AccountDto accountDto);
     
     Mono<Account> getBalanceByAccount(ObjectId idCli,String numberAccount);
+    
+    Mono<Account> payCredicAccount(Credit credit);
 
 }
