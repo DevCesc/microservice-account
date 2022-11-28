@@ -1,6 +1,7 @@
 package com.bootcamp.controller;
 
 import com.bootcamp.dto.AccountDto;
+import com.bootcamp.dto.Transaction;
 import com.bootcamp.entity.Account;
 import com.bootcamp.service.AccountService;
 import org.bson.types.ObjectId;
@@ -25,6 +26,11 @@ public class AccountController {
     @PostMapping(value = "/save")
     public Mono<Account> save (@RequestBody AccountDto accountDto){
         return accountService.save(accountDto);
+    }
+    
+    @PostMapping(value = "/saveTransaction")
+    public Mono<Account> saveTransaction(@RequestBody Transaction transaction){
+    	return accountService.saveTransaction(transaction);
     }
 
 

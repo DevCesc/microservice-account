@@ -15,6 +15,7 @@ public class AccountDto {
     private String typeAccount;
     private String numberAccount;
     private String typeClient;
+    private Double balance;
 
 
 
