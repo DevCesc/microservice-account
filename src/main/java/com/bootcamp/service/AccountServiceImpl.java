@@ -119,4 +119,10 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 
+	@Override
+	public Mono<Account> getBalanceByAccount(ObjectId idCli, String numberAccount) {
+		return getAllByIdClient(idCli).filter(x -> x.getNumberAccount().equals(numberAccount)).next();
+	}
+
+
 }

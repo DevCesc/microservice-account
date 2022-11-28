@@ -32,6 +32,12 @@ public class AccountController {
     public Mono<Account> saveTransaction(@RequestBody Transaction transaction){
     	return accountService.saveTransaction(transaction);
     }
+    
+    @GetMapping(value = "/getBalance/{codClie}/{numAccount}")
+    public Mono<Account> getBalance(@PathVariable ObjectId codClie, @PathVariable String numAccount ){
+    	return accountService.getBalanceByAccount(codClie,numAccount);
+    }
+    
 
 
 }

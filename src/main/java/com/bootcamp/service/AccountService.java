@@ -19,5 +19,6 @@ public interface AccountService {
     
     Mono<Account> getAccount(AccountDto accountDto);
     
+    Mono<Account> getBalanceByAccount(ObjectId idCli,String numberAccount);
 
 }
