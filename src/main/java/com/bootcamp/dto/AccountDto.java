@@ -16,6 +16,8 @@ public class AccountDto {
     private String numberAccount;
     private String typeClient;
     private Double balance;
+    private Double limit;
+    private Double debt;
 
 
 

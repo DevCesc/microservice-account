@@ -7,7 +7,9 @@ import lombok.ToString;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
+
 
 @Data
 @AllArgsConstructor
@@ -22,5 +24,10 @@ public class Account {
     private String typeAccount;
     private String numberAccount;
     private Double balance;
+    private Double debt;
+    private Double limit;
+    
+    @Transient
+    private String mensaje;
     
 }
