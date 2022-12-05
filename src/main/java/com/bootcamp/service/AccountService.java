@@ -10,7 +10,11 @@ import reactor.core.publisher.Mono;
 
 public interface AccountService {
 
-    Mono<Account> save (AccountDto accountDto);
+    Mono<Account> saveTypeClient (AccountDto accountDto);
+
+    Mono<Account> save (Account account);
+
+    Mono<Account> findByIdClientAndtypeAccount (String id, String typeAccount);
 
     Flux<Account> getAllByIdClient (ObjectId id);
     

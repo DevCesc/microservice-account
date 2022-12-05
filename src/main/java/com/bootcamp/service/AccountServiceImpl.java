@@ -36,7 +36,7 @@ public class AccountServiceImpl implements AccountService {
 
 
     @Override
-    public Mono<Account> save(AccountDto accountDto) {
+    public Mono<Account> saveTypeClient(AccountDto accountDto) {
 
         switch (accountDto.getTypeClient()) {
             case "Personal":
@@ -81,8 +81,18 @@ public class AccountServiceImpl implements AccountService {
             return null;
     }
 
+    @Override
+    public Mono<Account> save(Account account) {
+        return accountRepository.save(account);
+    }
 
-	@Override
+    @Override
+    public Mono<Account> findByIdClientAndtypeAccount(String id, String typeAccount) {
+        return accountRepository.findByIdClientAndTypeAccount(id,typeAccount);
+    }
+
+
+    @Override
 	public Mono<Account> saveTransaction(Transaction transaction) {
 		
 		Mono<Account> account = getAccount(transaction.getAccountDto());
