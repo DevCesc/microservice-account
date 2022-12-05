@@ -22,6 +22,11 @@ public interface AccountService {
     
     Mono<Account> getBalanceByAccount(ObjectId idCli,String numberAccount);
     
+    
+    Mono<Account> getAccountbyNumAccount(String numaccountDto);
+    
+
+    
 //    Mono<Account> payCredicAccount(Credit credit);
 
 }
