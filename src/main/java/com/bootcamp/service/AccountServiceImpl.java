@@ -1,7 +1,7 @@
 package com.bootcamp.service;
 
 import com.bootcamp.dto.AccountDto;
-import com.bootcamp.dto.Credit;
+//import com.bootcamp.dto.Credit;
 import com.bootcamp.dto.Transaction;
 import com.bootcamp.entity.Account;
 import com.bootcamp.repository.AccountRepository;
@@ -126,13 +126,13 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 
-	@Override
-	public Mono<Account> payCredicAccount(Credit credit) {
-		Mono<Account> account = getBalanceByAccount(credit.getIdClient(),credit.getNumberAccount());
-		Account accot = account.block();
-		accot.setDebt(accot.getDebt()-credit.getMoneyPay());
-		return accountRepository.save(accot);
-	}
+//	@Override
+//	public Mono<Account> payCredicAccount(Credit credit) {
+//		Mono<Account> account = getBalanceByAccount(credit.getIdClient(),credit.getNumberAccount());
+//		Account accot = account.block();
+//		accot.setDebt(accot.getDebt()-credit.getMoneyPay());
+//		return accountRepository.save(accot);
+//	}
 
 
 }
