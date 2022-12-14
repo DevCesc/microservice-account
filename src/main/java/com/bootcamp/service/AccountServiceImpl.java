@@ -2,6 +2,7 @@ package com.bootcamp.service;
 
 import com.bootcamp.clients.TransactionClientRest;
 import com.bootcamp.dto.AccountDto;
+import com.bootcamp.dto.Credit;
 //import com.bootcamp.dto.Credit;
 import com.bootcamp.dto.Transaction;
 import com.bootcamp.dto.TransactionRest;
@@ -90,7 +91,38 @@ public class AccountServiceImpl implements AccountService {
     public Mono<Account> findByIdClientAndtypeAccount(String id, String typeAccount) {
         return accountRepository.findByIdClientAndTypeAccount(id,typeAccount);
     }
-
+    
+    public Mono<Account> saveTransactionCredit(AccountDto numberAccount, Double amount){
+		Mono<Account> account = getAccount(numberAccount);
+		Account accot = account.block();
+		System.out.println("saveTransactionCredit: "+accot.getDebt());
+		Double debt =accot.getDebt()+amount;
+		if (debt>accot.getLimit()) {
+			return account;
+		}else {
+			accot.setDebt(debt);
+			return accountRepository.save(accot);
+		}
+    }
+    
+    
+    public Mono<Account> saveTransactionRetirement(AccountDto numberAccount, Double amount){
+		Mono<Account> account = getAccount(numberAccount);
+		Account accot = account.block();
+		 Double total= accot.getBalance()-amount;
+		 if (total<0) {
+			 return account;
+		 }else {
+			 //Inicio - Cobro de comisiones 
+			 if(accot.getNumMaxTrans()>=5) {
+				 total= accot.getBalance()-(amount-0.10); 
+			 }
+			 //Fin - Cobro de comisiones 
+			 accot.setBalance(total);
+			 accot.setNumMaxTrans(accot.getNumMaxTrans()+1);
+			return  accountRepository.save(accot);
+        }
+    }
 
     @Override
 	public Mono<Account> saveTransaction(Transaction transaction) {
@@ -100,15 +132,17 @@ public class AccountServiceImpl implements AccountService {
 		Account accot = account.block();
 		if(accot.getTypeAccount().equals("Credito")) {
 			
-			 Double debt =accot.getDebt()+transaction.getAmount();
-			if (debt>accot.getLimit()) {
-				return account;
-			}else {
-				accot.setDebt(debt);
-				return accountRepository.save(accot);
-			}
+			//Double debt =accot.getDebt()+transaction.getAmount();
+			//if (debt>accot.getLimit()) {
+			//	return account;
+			//}else {
+			//	accot.setDebt(debt);
+			//	return accountRepository.save(accot);
+			//}
+			return saveTransactionCredit(transaction.getAccountDto(),transaction.getAmount());
 		}else {
 		 if(transaction.getOperation()==1) {
+			 //Deposito
 			 System.out.println("Entro 1");
 			 Double total= accot.getBalance()+transaction.getAmount();
 			 //Inicio - Cobro de comisiones 
@@ -124,7 +158,8 @@ public class AccountServiceImpl implements AccountService {
 			 return accountRepository.save(accot);
 
 		 }else if (transaction.getOperation()==2) {
-			 System.out.println("Entro 2");
+			//Retiro
+			/* System.out.println("Entro 2");
 			 Double total= accot.getBalance()-transaction.getAmount();
 			 if (total<0) {
 				 return account;
@@ -137,8 +172,10 @@ public class AccountServiceImpl implements AccountService {
 				 accot.setBalance(total);
 				 accot.setNumMaxTrans(accot.getNumMaxTrans()+1);
 				return  accountRepository.save(accot);
-			 }
+			 }*/
+		   return saveTransactionRetirement(transaction.getAccountDto(),transaction.getAmount());
 		 }else {
+			 //Transferencia
 			 System.out.println("Entro 3");
 			 Double total= accot.getBalance()-transaction.getAmount();
 			 if (total<0) {
@@ -160,10 +197,8 @@ public class AccountServiceImpl implements AccountService {
 				 Double sourcetotal= sourceaccot.getBalance()+transaction.getAmount();
 				 sourceaccot.setBalance(sourcetotal);
 				 //Fin transferencia
-				 return accountRepository.save(accot).mergeWith(accountRepository.save(sourceaccot)).next();
-						 
-			 }
-			 
+				 return accountRepository.save(accot).mergeWith(accountRepository.save(sourceaccot)).next();					 
+			 }	 
 		  }
 		 
 		}
@@ -197,8 +232,18 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 
+	@Override
+	public Mono<Account> payCredicAccount(Credit  credit) {
+		
+		Mono<Account> account = getBalanceByAccount(credit.getIdClient(),credit.getNumberAccount());
+		Account accot = account.block();
+		System.out.println("lo que debe: "+accot.getDebt());
+		accot.setDebt(accot.getDebt()-credit.getMoneyPay());
+		return accountRepository.save(accot).mergeWith(saveTransactionRetirement(credit.getAccountDto(),credit.getMoneyPay())).next();
+	}
+	
 //	@Override
-//	public Mono<Account> payCredicAccount(Credit credit) {
+//	public Mono<Account> payCredicAccount(Credit  credit) {
 //		Mono<Account> account = getBalanceByAccount(credit.getIdClient(),credit.getNumberAccount());
 //		Account accot = account.block();
 //		accot.setDebt(accot.getDebt()-credit.getMoneyPay());

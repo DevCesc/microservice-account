@@ -1,6 +1,7 @@
 package com.bootcamp.service;
 
 import com.bootcamp.dto.AccountDto;
+import com.bootcamp.dto.Credit;
 //import com.bootcamp.dto.Credit;
 import com.bootcamp.dto.Transaction;
 import com.bootcamp.entity.Account;
@@ -29,8 +30,6 @@ public interface AccountService {
     
     Mono<Account> getAccountbyNumAccount(String numaccountDto);
     
-
-    
-//    Mono<Account> payCredicAccount(Credit credit);
+    Mono<Account> payCredicAccount(Credit credit);
 
 }
