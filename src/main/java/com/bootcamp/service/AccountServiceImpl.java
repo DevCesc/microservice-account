@@ -95,7 +95,6 @@ public class AccountServiceImpl implements AccountService {
     public Mono<Account> saveTransactionCredit(AccountDto numberAccount, Double amount){
 		Mono<Account> account = getAccount(numberAccount);
 		Account accot = account.block();
-		System.out.println("saveTransactionCredit: "+accot.getDebt());
 		Double debt =accot.getDebt()+amount;
 		if (debt>accot.getLimit()) {
 			return account;
@@ -131,14 +130,6 @@ public class AccountServiceImpl implements AccountService {
 		
 		Account accot = account.block();
 		if(accot.getTypeAccount().equals("Credito")) {
-			
-			//Double debt =accot.getDebt()+transaction.getAmount();
-			//if (debt>accot.getLimit()) {
-			//	return account;
-			//}else {
-			//	accot.setDebt(debt);
-			//	return accountRepository.save(accot);
-			//}
 			return saveTransactionCredit(transaction.getAccountDto(),transaction.getAmount());
 		}else {
 		 if(transaction.getOperation()==1) {
@@ -157,22 +148,7 @@ public class AccountServiceImpl implements AccountService {
 			// clientRest.save(objRest);
 			 return accountRepository.save(accot);
 
-		 }else if (transaction.getOperation()==2) {
-			//Retiro
-			/* System.out.println("Entro 2");
-			 Double total= accot.getBalance()-transaction.getAmount();
-			 if (total<0) {
-				 return account;
-			 }else {
-				 //Inicio - Cobro de comisiones 
-				 if(accot.getNumMaxTrans()>=5) {
-					 total= accot.getBalance()-(transaction.getAmount()-0.10); 
-				 }
-				 //Fin - Cobro de comisiones 
-				 accot.setBalance(total);
-				 accot.setNumMaxTrans(accot.getNumMaxTrans()+1);
-				return  accountRepository.save(accot);
-			 }*/
+		 }else if (transaction.getOperation()==2) {	 
 		   return saveTransactionRetirement(transaction.getAccountDto(),transaction.getAmount());
 		 }else {
 			 //Transferencia
