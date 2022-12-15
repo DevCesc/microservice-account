@@ -31,5 +31,15 @@ public interface AccountService {
     Mono<Account> getAccountbyNumAccount(String numaccountDto);
     
     Mono<Account> payCredicAccount(Credit credit);
+    
+    Mono<Account> saveTransactionCredit(AccountDto numberAccount, Double amount);
+    
+    Mono<Account> saveTransactionRetirement(AccountDto numberAccount, Double amount);
+    
+    Mono<Account> saveTransactionDeposit(AccountDto numberAccount, Double amount);
+    
+    Mono<Account> saveTransactionTransfer(AccountDto numberAccount, Double amount,String sourceAccount);
+    
+  
 
 }
