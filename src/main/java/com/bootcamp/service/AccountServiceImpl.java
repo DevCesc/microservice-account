@@ -110,6 +110,8 @@ public class AccountServiceImpl implements AccountService {
     
     @Override
     public Mono<Account> saveTransactionRetirement(AccountDto numberAccount, Double amount){
+
+    	boolean commission = false;
 		Mono<Account> account = getAccount(numberAccount);
 		Account accot = account.block();
 		 Double total= accot.getBalance()-amount;
@@ -118,11 +120,22 @@ public class AccountServiceImpl implements AccountService {
 		 }else {
 			 //Inicio - Cobro de comisiones 
 			 if(accot.getNumMaxTrans()>=5) {
+				 commission=true;
 				 total= accot.getBalance()-(amount-0.10); 
 			 }
 			 //Fin - Cobro de comisiones 
 			 accot.setBalance(total);
 			 accot.setNumMaxTrans(accot.getNumMaxTrans()+1);
+			 
+			 TransactionRest objRest = new TransactionRest();
+			 Operation objOperation = new Operation();
+			 objOperation.setCodOperation(2);
+			 objOperation.setDescription("Retiro");
+		     objRest.setSourceAccount(accot.getNumberAccount());
+		     objRest.setAmount(amount);
+		     objRest.setCommission(commission==true ? 0.10 :0);
+		     objRest.setOperation(objOperation);
+		     
 			return  accountRepository.save(accot);
         }
     }
@@ -130,6 +143,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Mono<Account> saveTransactionDeposit(AccountDto numberAccount, Double amount){
     
+    	boolean commission = false;
     	Mono<Account> account = getAccount(numberAccount);
     	Account accot = account.block();
 		 //Deposito
@@ -137,20 +151,24 @@ public class AccountServiceImpl implements AccountService {
 		 Double total= accot.getBalance()+amount;
 		 //Inicio - Cobro de comisiones 
 		 if(accot.getNumMaxTrans()>=5) {
+			  commission=true;
 			  total= accot.getBalance()+(amount-0.10);
 		 }
 		 //Fin - Cobro de comisiones 
 		 accot.setBalance(total);
 		 accot.setNumMaxTrans(accot.getNumMaxTrans()+1);
+		 
 		 TransactionRest objRest = new TransactionRest();
 		 Operation objOperation = new Operation();
 		 objOperation.setCodOperation(1);
 		 objOperation.setDescription("Deposito");
 	     objRest.setSourceAccount(accot.getNumberAccount());
 	     objRest.setAmount(amount);
-	     objRest.setCommission(0.10);
+	     objRest.setCommission(commission==true ? 0.10 :0);
 	     objRest.setOperation(objOperation);
+	     
 	     clientRest.save(objRest).subscribe();
+	     
 		 return accountRepository.save(accot);
     }
 
@@ -179,6 +197,7 @@ public class AccountServiceImpl implements AccountService {
 			 Double sourcetotal= sourceaccot.getBalance()+amount;
 			 sourceaccot.setBalance(sourcetotal);
 			 //Fin transferencia
+			
 			 return accountRepository.save(accot).mergeWith(accountRepository.save(sourceaccot)).next();	
 		 }
     }
