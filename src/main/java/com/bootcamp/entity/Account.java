@@ -22,6 +22,9 @@ public class Account {
     private ObjectId idClient;
     private String typeAccount;
     private String numberAccount;
+    private String numberAccountInterbank;
+    private boolean walletYanki;
+    private String status;
     private Double balance;
     private Double debt;
     private Double limit;
