@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import java.util.Objects;
+import java.util.Optional;
 
 
 @Service
@@ -36,6 +37,20 @@ public class AccountServiceImpl implements AccountService {
         return accountFlux;
     }
 
+
+    @Override
+    public Mono<Account> savePersonal(AccountDto accountDto) {
+        Optional<Account> existsAccount = accountRepository.findByTypeAccount(accountDto.getTypeAccount());
+        existsAccount.ifPresent(e -> {
+
+        });
+        return null;
+    }
+
+    @Override
+    public Mono<Account> saveEmpresarial(AccountDto accountDto) {
+        return null;
+    }
 
     @Override
     public Mono<Account> saveTypeClient(AccountDto accountDto) {
@@ -89,8 +104,9 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Mono<Account> findByIdClientAndtypeAccount(String id, String typeAccount) {
-        return accountRepository.findByIdClientAndTypeAccount(id,typeAccount);
+    public Mono<Account> findByIdClientAndTypeAccount(ObjectId id, String typeAccount) {
+        return accountRepository.findByIdClient(id).filter(x -> x.getTypeAccount().startsWith(typeAccount));
+//        return accountRepository.findByIdClient(id);
     }
     
     @Override
