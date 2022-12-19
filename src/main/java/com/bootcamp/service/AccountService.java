@@ -1,6 +1,7 @@
 package com.bootcamp.service;
 
 import com.bootcamp.dto.AccountDto;
+import com.bootcamp.dto.Credit;
 //import com.bootcamp.dto.Credit;
 import com.bootcamp.dto.Transaction;
 import com.bootcamp.entity.Account;
@@ -28,6 +29,19 @@ public interface AccountService {
     
     Mono<Account> getBalanceByAccount(ObjectId idCli,String numberAccount);
     
-//    Mono<Account> payCredicAccount(Credit credit);
+    
+    Mono<Account> getAccountbyNumAccount(String numaccountDto);
+    
+    Mono<Account> payCredicAccount(Credit credit);
+    
+    Mono<Account> saveTransactionCredit(AccountDto numberAccount, Double amount);
+    
+    Mono<Account> saveTransactionRetirement(AccountDto numberAccount, Double amount);
+    
+    Mono<Account> saveTransactionDeposit(AccountDto numberAccount, Double amount);
+    
+    Mono<Account> saveTransactionTransfer(AccountDto numberAccount, Double amount,String sourceAccount);
+    
+  
 
 }

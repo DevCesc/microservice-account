@@ -1,6 +1,7 @@
 package com.bootcamp.controller;
 
 import com.bootcamp.dto.AccountDto;
+import com.bootcamp.dto.Credit;
 //import com.bootcamp.dto.Credit;
 import com.bootcamp.dto.Transaction;
 import com.bootcamp.entity.Account;
@@ -82,11 +83,12 @@ public class AccountController {
     public Mono<Account> getBalance(@PathVariable ObjectId codClie, @PathVariable String numAccount ){
     	return accountService.getBalanceByAccount(codClie,numAccount);
     }
+   
     
-//    @PostMapping(value = "/payCredit")
-//    public Mono<Account> save (@RequestBody Credit credit){
-//        return accountService.payCredicAccount(credit);
-//    }
+    @PostMapping(value = "/payCredit")
+    public Mono<Account> payCredit (@RequestBody Credit credit){
+       return accountService.payCredicAccount(credit);
+    }
 
 
 }

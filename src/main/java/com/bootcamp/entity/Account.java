@@ -25,6 +25,7 @@ public class Account {
     private Double balance;
     private Double debt;
     private Double limit;
+    private int numMaxTrans;
     
     
 }
