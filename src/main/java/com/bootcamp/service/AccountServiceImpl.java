@@ -11,6 +11,7 @@ import com.bootcamp.entity.Account;
 import com.bootcamp.repository.AccountRepository;
 
 
+import com.bootcamp.util.UtilMethods;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -217,8 +218,19 @@ public class AccountServiceImpl implements AccountService {
 			 return accountRepository.save(accot).mergeWith(accountRepository.save(sourceaccot)).next();	
 		 }
     }
-    
-    @Override
+
+	@Override
+	public Mono<Account> saveAccountForYanki(Account account) {
+		account.setTypeAccount("Ahorro");
+		account.setNumberAccount(UtilMethods.generateNumberAccount(14));
+		account.setNumberAccountInterbank(UtilMethods.generateNumberAccount(20));
+		account.setWalletYanki(true);
+		account.setStatus("true");
+		account.setBalance(0.00);
+		return accountRepository.save(account);
+	}
+
+	@Override
 	public Mono<Account> saveTransaction(Transaction transaction) {
 		
 		Mono<Account> account = getAccount(transaction.getAccountDto());

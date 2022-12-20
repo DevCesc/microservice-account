@@ -43,10 +43,13 @@ public interface AccountService {
     Mono<Account> saveTransactionDeposit(AccountDto numberAccount, Double amount);
     
     Mono<Account> saveTransactionTransfer(AccountDto numberAccount, Double amount,String sourceAccount);
-    
+
     Mono<Account> findPrimaryAccount(ObjectId id);
     
     Mono<Account> findAcountByIdClient(ObjectId id);
-  
+ 
+
+    Mono<Account> saveAccountForYanki (Account account);
+
 
 }

@@ -91,4 +91,14 @@ public class AccountController {
     }
 
 
+    @PostMapping(value = "/save/yanki")
+    public Mono<ResponseEntity<Account>> saveAccountForYanki(@RequestBody Account account){
+        return accountService.saveAccountForYanki(account)
+                .map(e -> ResponseEntity
+                        .created(URI.create("/api/v1/accounts".concat("/").concat(String.valueOf(e.getId()))))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(e)
+                );
+    }
+
 }
