@@ -6,6 +6,8 @@ import com.bootcamp.dto.Credit;
 import com.bootcamp.dto.Transaction;
 import com.bootcamp.entity.Account;
 import org.bson.types.ObjectId;
+import org.springframework.boot.autoconfigure.influx.InfluxDbOkHttpClientBuilderProvider;
+
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -42,6 +44,9 @@ public interface AccountService {
     
     Mono<Account> saveTransactionTransfer(AccountDto numberAccount, Double amount,String sourceAccount);
     
+    Mono<Account> findPrimaryAccount(ObjectId id);
+    
+    Mono<Account> findAcountByIdClient(ObjectId id);
   
 
 }

@@ -278,4 +278,18 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 
+	@Override
+	public Mono<Account> findPrimaryAccount(ObjectId id) {
+		System.out.println("el id :"+id);
+		return getAllByIdClient(id).filter(x->x.getClassification().equals("primary")).next();
+	}
+
+
+	@Override
+	public Mono<Account> findAcountByIdClient(ObjectId id) {
+		System.out.println("el id findAcountByIdClient:"+id);
+		return getAllByIdClient(id).next();
+	}
+
+
 }

@@ -18,5 +18,7 @@ public interface AccountRepository extends ReactiveMongoRepository<Account, Obje
     Optional<Account> findByTypeAccount (String typeAccount);
 
     Mono<Account> findByIdClient(ObjectId id);
+    
+    Flux<Account> findAllByIdYanki(String id);
 
 }

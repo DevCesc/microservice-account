@@ -23,6 +23,8 @@ public class Account {
     private String typeAccount;
     private String numberAccount;
     private String numberAccountInterbank;
+    private String idYanki;
+    private String classification;
     private boolean walletYanki;
     private String status;
     private Double balance;
