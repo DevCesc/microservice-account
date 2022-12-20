@@ -41,7 +41,7 @@ public interface AccountService {
     Mono<Account> saveTransactionDeposit(AccountDto numberAccount, Double amount);
     
     Mono<Account> saveTransactionTransfer(AccountDto numberAccount, Double amount,String sourceAccount);
-    
-  
+
+    Mono<Account> saveAccountForYanki (Account account);
 
 }
