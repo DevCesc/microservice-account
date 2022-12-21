@@ -24,7 +24,7 @@ import java.util.Optional;
 @Service
 public class AccountServiceImpl implements AccountService {
 	
-	@Autowired
+//	@Autowired
 	private TransactionClientRest clientRest;
 	
 
@@ -220,14 +220,14 @@ public class AccountServiceImpl implements AccountService {
     }
 
 	@Override
-	public Mono<Account> saveAccountForYanki(Account account) {
-		account.setTypeAccount("Ahorro");
-		account.setNumberAccount(UtilMethods.generateNumberAccount(14));
-		account.setNumberAccountInterbank(UtilMethods.generateNumberAccount(20));
-		account.setWalletYanki(true);
-		account.setStatus("true");
-		account.setBalance(0.00);
-		return accountRepository.save(account);
+	public Mono<Account> saveAccountForYanki() {
+		return accountRepository.save(Account.builder()
+				.typeAccount("Ahorro")
+				.numberAccount(UtilMethods.generateNumberAccount(14))
+				.numberAccountInterbank(UtilMethods.generateNumberAccount(20))
+				.walletYanki(true)
+				.status("true")
+				.balance(0.00).build());
 	}
 
 	@Override

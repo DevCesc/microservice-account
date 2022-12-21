@@ -61,7 +61,7 @@ public class AccountController {
 
         Mono<Account> monoBody = Mono.just(account);
         Mono<Account> monoDB = accountService.findByIdClientAndTypeAccount(account.getIdClient(), account.getTypeAccount());
-
+        //COMPLETE SET AND GET
         return monoDB.zipWith(monoBody, (db, a) -> {
                     db.setIdClient(a.getIdClient());
                     db.setNumberAccount(a.getNumberAccount());
@@ -91,9 +91,10 @@ public class AccountController {
     }
 
 
+    /*creación de la cuenta cuando creas tu monedero yanki*/
     @PostMapping(value = "/save/yanki")
-    public Mono<ResponseEntity<Account>> saveAccountForYanki(@RequestBody Account account){
-        return accountService.saveAccountForYanki(account)
+    public Mono<ResponseEntity<Account>> saveAccountForYanki(){
+        return accountService.saveAccountForYanki()
                 .map(e -> ResponseEntity
                         .created(URI.create("/api/v1/accounts".concat("/").concat(String.valueOf(e.getId()))))
                         .contentType(MediaType.APPLICATION_JSON)

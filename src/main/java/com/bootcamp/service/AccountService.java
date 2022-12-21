@@ -49,7 +49,7 @@ public interface AccountService {
     Mono<Account> findAcountByIdClient(ObjectId id);
  
 
-    Mono<Account> saveAccountForYanki (Account account);
+    Mono<Account> saveAccountForYanki ();
 
 
 }

@@ -1,9 +1,6 @@
 package com.bootcamp.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -15,6 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @Document(collection = "account")
 @ToString
+@Builder
 public class Account {
 
     @Id
